@@ -1,5 +1,5 @@
 Package: RIBMDB
-Version: 1.0-20
+Version: 1.0.0
 Revision: $Rev: 3500 $
 Date: 2020-11-03
 Authors@R: c(person("ROCKET", "SOFTWARE", role = c("aut", "cre"),

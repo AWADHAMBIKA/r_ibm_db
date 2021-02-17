@@ -2,11 +2,11 @@ library(DBI)
 library(pool)
   pool <- dbPool(
     drv = RIBMDB::ODBC(),
-    dbname = "bjhadb",
-    host = "waldevdbclnxtst06.dev.rocketsoftware.com",
+    dbname = "dbtest",
+    host = "abc@abc.com",
     port = 60000,
-    user = "newton",
-    password = "A2m8test"
+    user = "admin",
+    password = "admin"
   )
-  dbGetQuery(pool, "SELECT * from priyankatestnew;")
+  dbGetQuery(pool, "SELECT * from dummy;")
   poolClose(pool)

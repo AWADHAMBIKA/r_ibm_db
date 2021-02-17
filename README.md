@@ -104,12 +104,12 @@ For **Docker Linux Container**, use below commands:
 
 - Command to install in another folder rather than defaul R LIB using -l(. means in the same directory where you are running the command else you can specify the directory where you want to install the LIBRARY))
 ```
-> sudo R CMD INSTALL -l . RIBMDB_1.0-20.tar.gz --no-test-load
+> sudo R CMD INSTALL -l . RIBMDB_1.0-20.tar.gz
 ```
 
 - Command to install a package without test load
 ```
-> sudo R CMD INSTALL RIBMDB_1.0-20.tar.gz --no-test-load
+> sudo R CMD INSTALL -c --no-test-load RIBMDB_1.0-20.tar.gz
 ```
 
 - Command to install a package with args to CONFIGURE i.e. If you don't want the package installer to install the CLI driver (OR) You already have the CLI driver path set i.e. "/home/foo/bar/clidriver"
