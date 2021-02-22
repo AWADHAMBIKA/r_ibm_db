@@ -1,7 +1,7 @@
 Package: RIBMDB
-Version: 1.0.0
+Version: 1.0-21
 Revision: $Rev: 3500 $
-Date: 2020-11-03
+Date: 2021-02-21
 Authors@R: c(person("ROCKET", "SOFTWARE", role = c("aut", "cre"),
                     email = "bkumar@rocketsoftware.com"))
 Title: DB2 Database Access
@@ -14,7 +14,7 @@ LazyLoad: yes
 Biarch: yes
 License: GPL-2 | GPL-3
 NeedsCompilation: yes
-Packaged: 2020-01-22 06:32:03 UTC
+Packaged: 2021-02-21 06:32:03 UTC
 Author: ROCKET SOFTWARE [aut, cre]
 Maintainer: ROCKET SOFTWARE <bkumar@rocketsoftware.com>
 Repository: CRAN
