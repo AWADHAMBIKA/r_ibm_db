@@ -3,14 +3,13 @@
 platform = .Platform$OS.type
 arch = .Platform$r_arch
 
-R_home = R.home()
 CURRENT_DIR = getwd()
 
 DOWNLOAD_DIR = paste(CURRENT_DIR,'inst',sep="/");
 
 installerURL = 'https://public.dhe.ibm.com/ibmdl/export/pub/software/data/db2/drivers/odbc_cli/'
 
-license_agreement = paste('\n\n****************************************\nYou are downloading a package which includes the R module for IBM DB2/Informix.  The module is licensed under the Apache License 2.0. The package also includes IBM ODBC and CLI Driver from IBM, which is automatically downloaded as the R module is installed on your system/device. The license agreement to the IBM ODBC and CLI Driver is available in ',R_home,'/site-library/RIBMDB/clidriver/license. Check for additional dependencies, which may come with their own license agreement(s). Your use of the components of the package and dependencies constitutes your acceptance of their respective license agreements. If you do not accept the terms of any license agreement(s), then delete the relevant component(s) from your device.\n****************************************\n',sep = "")
+license_agreement = '\n\n****************************************\nYou are downloading a package which includes the R module for IBM DB2/Informix.  The module is licensed under the Apache License 2.0. The package also includes IBM ODBC and CLI Driver from IBM, which is automatically downloaded as the R module is installed on your system/device. The license agreement to the IBM ODBC and CLI Driver is available in <R_LIB_HOME>/RIBMDB/clidriver/license. Check for additional dependencies, which may come with their own license agreement(s). Your use of the components of the package and dependencies constitutes your acceptance of their respective license agreements. If you do not accept the terms of any license agreement(s), then delete the relevant component(s) from your device.\n****************************************\n'
 
 if((nchar(arch)==0)){
   arch = R.version$arch
@@ -27,8 +26,8 @@ install_R_ibm_db = function(installerURL)
   
   IS_ENVIRONMENT_VAR=FALSE
   CURR_CLI_DIR=paste(CURRENT_DIR,"inst/clidriver",sep = "/")
-  CLI_DIR=paste(R_home,"site-library/RIBMDB/clidriver",sep="/")
-  RIBMDB_DIR=paste(R_home,"site-library/RIBMDB",sep="/")
+  CLI_DIR=paste(.libPaths()[1],"RIBMDB/clidriver",sep="/")
+  RIBMDB_DIR=paste(.libPaths()[1],"RIBMDB",sep="/")
   
   #Copying the so file for load test step of installation
   if(platform == 'linux' || platform == 'unix'){
@@ -43,8 +42,12 @@ install_R_ibm_db = function(installerURL)
   
   if(!(nchar(env)==0) || dir.exists(CLI_DIR) || dir.exists(CURR_CLI_DIR)){
     if((nchar(env)==0)){
-      IBM_DB_HOME = CLI_DIR
-      Sys.setenv("IBM_DB_HOME"=IBM_DB_HOME)
+      #IBM_DB_HOME = CLI_DIR
+      if(dir.exists(CLI_DIR)){
+        Sys.setenv("IBM_DB_HOME"=CLI_DIR)
+      }else{
+        Sys.setenv("IBM_DB_HOME"=CURR_CLI_DIR)
+      }
     }
     IS_ENVIRONMENT_VAR = TRUE
     
@@ -133,7 +136,20 @@ copyAndExtractCliDriver = function(installerfileURL,INSTALLER_FILE) {
   #Checking for successfull extraction.
   if(dir.exists(paste(DOWNLOAD_DIR,'clidriver',sep="/"))){
     cat('Downloading and extraction of DB2 ODBC CLI Driver completed successfully... \n')
-    IBM_DB_HOME = paste(DOWNLOAD_DIR, '/clidriver',sep="");
+    if(platform == 'windows') {
+      current_folder = paste(DOWNLOAD_DIR, 'clidriver/include/',sep="/")
+      list_of_files <- list.files(current_folder, ".h") 
+      
+      new_folder = paste(R.home(),'include',sep="/")
+      # ".h" is the type of file I want to copy. Remove if copying all types of files. 
+      file.copy(file.path(current_folder,list_of_files), new_folder)
+       
+      current_folder = paste(DOWNLOAD_DIR, 'clidriver/lib/',sep="/")
+      list_of_files <- list.files(current_folder, ".lib")
+      new_folder = paste(R.home(),'library',sep="/")
+      file.copy(file.path(current_folder,list_of_files), new_folder)
+    }
+    IBM_DB_HOME = paste(.libPaths()[1], 'RIBMDB/clidriver',sep="/");
     Sys.setenv("IBM_DB_HOME"=IBM_DB_HOME)
     
     #Remove the Archive file after successfull extraction.
